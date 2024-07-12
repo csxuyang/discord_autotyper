@@ -5,7 +5,7 @@ import random
 
 
 class AutoTyper():
-    def __init__(self, authorization, channel_id, text, interval=86500, inner_interval=10):
+    def __init__(self, authorization, channel_id, text, interval=7200, inner_interval=10):
         self.channel_id = channel_id
         self.authorization = authorization
         self.interval = interval
@@ -49,8 +49,8 @@ class AutoTyper():
 
 
 if __name__ == "__main__":
-    channel_id = 123456789  # fill in channel id to which you want to send message
-    text = ["""fill in what want to send 1""", """fill in what want to send 2"""]  # fill in what want to send. It's a list which contains text for every account
-    authorization = ["autorization1", "autorization2"]  # fill authorization, find it in browser console. It's a list which contains authorization for every account
+    channel_id = *  # fill in channel id to which you want to send message
+    text = ["""*"""]  # fill in what want to send. It's a list which contains text for every account
+    authorization = ["*"]  # fill authorization, find it in browser console. It's a list which contains authorization for every account
     autotyper = AutoTyper(authorization, channel_id, text)
     autotyper.batch_chat()
