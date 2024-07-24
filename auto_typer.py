@@ -2,13 +2,16 @@ import requests
 import json
 import time
 import random
-
+from dotenv import load_dotenv  
+import os  
+  
+# 加载.env文件  
+load_dotenv()
 
 class AutoTyper():
-    def __init__(self, authorization, channel_id, text, interval=7200, inner_interval=10):
+    def __init__(self, authorization, channel_id, text,  inner_interval=10):
         self.channel_id = channel_id
         self.authorization = authorization
-        self.interval = interval
         self.inner_interval = inner_interval
         self.text = text
 
@@ -36,21 +39,40 @@ class AutoTyper():
     def inner_sleep(self, t1=10, t2=60):
         time.sleep(self.inner_interval + random.randint(t1, t2))
 
-    def daily_sleep(self, t1=10, t2=60):
-        print("daily sleep for {} seconds".format(self.interval))
-        time.sleep(self.interval + random.randint(t1, t2))
-
     def batch_chat(self):
         print("task number:{}, time:{}".format(self.count, time.asctime(time.localtime(time.time()))))
-        for auth_, text_ in zip(self.authorization, self.text):
-            self.chat(auth_, text_)
+        self.chat(self.authorization, self.text)
         self.count += 1
-        self.daily_sleep()
 
 
 if __name__ == "__main__":
-    channel_id = *  # fill in channel id to which you want to send message
-    text = ["""*"""]  # fill in what want to send. It's a list which contains text for every account
-    authorization = ["*"]  # fill authorization, find it in browser console. It's a list which contains authorization for every account
+    channel_id =  os.getenv("CHANNEL_ID")   
+    text = os.getenv("TEXT")  
+    authorization = os.getenv("AUTHORIZATION") 
     autotyper = AutoTyper(authorization, channel_id, text)
+    # 设定时间戳文件的路径  
+    timestamp_file = 'last_run_timestamp.txt'  
+  
+    # 尝试读取上次运行的时间戳  
+    last_run_timestamp = 0  
+    try:  
+        with open(timestamp_file, 'r') as f:  
+            last_run_timestamp = float(f.read().strip())  
+    except FileNotFoundError:  
+        # 如果文件不存在，认为上次运行时间已经很久了  
+        print("上次运行时间记录文件不存在，视为允许运行。")  
+    while True:  
+        current_timestamp = time.time()  
+        time_difference = current_timestamp - last_run_timestamp  
+      
+        if time_difference > 7200:  # 7200秒 = 2小时  
+            print(f"距离上次运行时间已超过两小时（{time_difference}秒），开始执行脚本。")  
+            break  # 退出循环，开始执行脚本的其余部分  
+        else:  
+            print(f"距离上次运行时间未超过两小时（{time_difference}秒），等待中...")  
+            time.sleep(60)  # 等待一分钟后再次检查     
     autotyper.batch_chat()
+    
+    # 更新时间戳文件 
+    with open(timestamp_file, 'w') as f:  
+        f.write(str(current_timestamp))
