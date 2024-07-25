@@ -14,8 +14,8 @@ class AutoTyper():
         self.authorization = authorization
         self.inner_interval = inner_interval
         self.text = text
-
         self.count = 0
+        self.retry_count = 0
 
     def chat(self, auth, content):
         self.inner_sleep()
@@ -35,6 +35,12 @@ class AutoTyper():
         url = 'https://discord.com/api/v9/channels/{}/messages'.format(self.channel_id)
         res = requests.post(url=url, headers=header, data=json.dumps(msg))
         print(res.content)
+        if "code" in res.content and self.retry_count <3:
+            print("调用异常进行重试，等待...")
+            time.sleep(120)
+            print("调用异常进行重试，开始执行...")
+            self.retry_count +=1
+            self.chat(auth, content)
 
     def inner_sleep(self, t1=10, t2=60):
         time.sleep(self.inner_interval + random.randint(t1, t2))
