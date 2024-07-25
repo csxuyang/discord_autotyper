@@ -72,7 +72,7 @@ if __name__ == "__main__":
         current_timestamp = time.time()  
         time_difference = current_timestamp - last_run_timestamp  
       
-        if time_difference > 7200:  # 7200秒 = 2小时  
+        if time_difference > 7300:  # 7200秒 = 2小时  
             print(f"距离上次运行时间已超过两小时（{time_difference}秒），开始执行脚本。")  
             break  # 退出循环，开始执行脚本的其余部分  
         else:  
