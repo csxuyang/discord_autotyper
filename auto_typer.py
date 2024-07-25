@@ -35,7 +35,8 @@ class AutoTyper():
         url = 'https://discord.com/api/v9/channels/{}/messages'.format(self.channel_id)
         res = requests.post(url=url, headers=header, data=json.dumps(msg))
         print(res.content)
-        if "code" in res.content and self.retry_count <3:
+        data = res.json()
+        if 'code' in data and self.retry_count <3:
             print("调用异常进行重试，等待...")
             time.sleep(120)
             print("调用异常进行重试，开始执行...")
