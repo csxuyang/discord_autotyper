@@ -38,7 +38,7 @@ class AutoTyper():
         data = res.json()
         if 'code' in data and self.retry_count <3:
             print("调用异常进行重试，等待...")
-            time.sleep(120)
+            time.sleep(300)
             print("调用异常进行重试，开始执行...")
             self.retry_count +=1
             self.chat(auth, content)
